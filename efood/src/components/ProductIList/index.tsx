@@ -1,48 +1,57 @@
 import { Link, useParams } from "react-router-dom";
-import Products from "../../models/Products";
 import Banner from "../Banner";
 import Header from "../Header";
 import Product from "../Product";
 import { ContainerProducts, Mensage } from "./styles";
+import { Restaurantes } from "../../Pages/Home";
+import { useEffect, useState } from "react";
 
-export type Props = {
-  products: Products[];
-};
-
-const ProductIList = ({ products }: Props) => {
+const ProductIList = () => {
   const { id } = useParams();
+  const [restaurante, setRestaurante] = useState<Restaurantes>();
 
-  const idProduct = products.find((prod) => prod.id.toString() === id);
+  useEffect(() => {
+    fetch(`https://fake-api-tau.vercel.app/api/efood/restaurantes/${id}`)
+      .then((res) => res.json())
+      .then((res) => setRestaurante(res));
+  }, [id]);
+
+  if (!restaurante) {
+    return (
+      <Mensage>
+        <p>Desculpe mas não temos nenhum produto aqui!</p>
+        <Link to="/">Voltar a página inicial</Link>
+      </Mensage>
+    );
+  }
 
   return (
     <div>
       <Header page="product" />
 
-      {idProduct && (
-        <>
-          <Banner title={idProduct.title} category={idProduct.category} />
-          <div className="container">
-            {idProduct.items.length > 0 ? (
-              <ContainerProducts>
-                {idProduct.items.map((item) => (
-                  <Product
-                    key={item.id}
-                    id={item.id}
-                    title={item.title}
-                    description={item.description}
-                    image={item.image}
-                  />
-                ))}
-              </ContainerProducts>
-            ) : (
-              <Mensage>
-                <p>Desculpe mas não temos nenhum produto aqui!</p>
-                <Link to="/">Voltar a página inicial</Link>
-              </Mensage>
-            )}
-          </div>
-        </>
-      )}
+      <>
+        <Banner
+          title={restaurante.titulo}
+          category={restaurante.tipo}
+          image={restaurante.capa}
+        />
+        <div className="container">
+          <ContainerProducts>
+            {restaurante.cardapio.map((item) => (
+              <li key={item.id}>
+                <Product
+                  id={item.id}
+                  title={item.nome}
+                  description={item.descricao}
+                  image={item.foto}
+                  porcao={item.porcao}
+                  preco={item.preco}
+                />
+              </li>
+            ))}
+          </ContainerProducts>
+        </div>
+      </>
     </div>
   );
 };

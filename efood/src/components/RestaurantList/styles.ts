@@ -1,7 +1,6 @@
 import styled from "styled-components";
-import { Props } from ".";
 
-export const Container = styled.div<Omit<Props, "categories">>`
+export const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 48px 80px;
