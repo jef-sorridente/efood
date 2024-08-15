@@ -4,14 +4,18 @@ import { GlobalStyles } from "./styles";
 
 import AppRoutes from "./routes";
 import Footer from "./components/Footer";
+import { Provider } from "react-redux";
+import store from "./store";
 
 function App() {
   return (
-    <BrowserRouter>
-      <GlobalStyles />
-      <AppRoutes />
-      <Footer />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <GlobalStyles />
+        <AppRoutes />
+        <Footer />
+      </BrowserRouter>
+    </Provider>
   );
 }
 
