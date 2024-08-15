@@ -26,6 +26,10 @@ export const Head = styled.div<Props>`
   align-items: center;
   height: 100%;
   margin-bottom: ${(props) => (props.page === "home" ? "140px" : "0px")};
+
+  img {
+    margin-left: ${(props) => (props.page === "home" ? "0px" : "28px")};
+  }
 `;
 
 export const BtnBack = styled(Link)`

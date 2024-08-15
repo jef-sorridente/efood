@@ -1,20 +1,21 @@
 import * as S from "./styled";
 
-import bannerImg from "../../assets/images/italiana.png";
-
 type Props = {
   title: string;
   category: string;
+  image: string;
 };
 
-const Banner = ({ title, category }: Props) => (
-  <S.Banner style={{ backgroundImage: `url(${bannerImg})` }}>
-    <S.Background />
-    <div className="container">
-      <S.Category>{category}</S.Category>
-      <S.Title>{title}</S.Title>
-    </div>
-  </S.Banner>
-);
+const Banner = ({ title, category, image }: Props) => {
+  return (
+    <S.Banner style={{ backgroundImage: `url(${image})` }}>
+      <S.Background />
+      <div className="container">
+        <S.Category>{category}</S.Category>
+        <S.Title>{title}</S.Title>
+      </div>
+    </S.Banner>
+  );
+};
 
 export default Banner;
