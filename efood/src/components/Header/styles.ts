@@ -38,3 +38,7 @@ export const BtnBack = styled(Link)`
   gap: 8px;
   color: ${colors.primary};
 `;
+
+export const InfoCart = styled.div`
+  cursor: pointer;
+`;
