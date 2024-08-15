@@ -10,18 +10,30 @@ import {
 } from "./styles";
 
 import closeIcon from "../../assets/images/close.png";
+import { useDispatch } from "react-redux";
+// import { add } from "../../store/reducers/cart";
+import { Cardapio } from "../../Pages/Home";
+import { add, open } from "../../store/reducers/cart";
 
 type Props = {
-  id: number;
-  title: string;
-  description: string;
-  preco: number;
-  image: string;
-  porcao: string;
+  cardapio: Cardapio;
 };
 
-const Product = ({ id, title, description, preco, image, porcao }: Props) => {
+export const formatPrice = (preco = 0) => {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(preco);
+};
+
+const Product = ({ cardapio }: Props) => {
   const [modal, setModal] = useState(false);
+  const dispatch = useDispatch();
+
+  const addToCart = () => {
+    dispatch(add(cardapio));
+    dispatch(open());
+  };
 
   const getDescription = (description: string) => {
     if (description.length > 160) {
@@ -29,31 +41,26 @@ const Product = ({ id, title, description, preco, image, porcao }: Props) => {
     }
   };
 
-  const formatPrice = (preco = 0) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(preco);
-  };
-
   return (
     <>
-      <Container key={id}>
-        <Image src={image} alt={title} />
-        <Title>{title}</Title>
-        <p>{getDescription(description)}</p>
+      <Container key={cardapio.id}>
+        <Image src={cardapio.foto} alt={cardapio.nome} />
+        <Title>{cardapio.nome}</Title>
+        <p>{getDescription(cardapio.descricao)}</p>
         <Buttom onClick={() => setModal(true)}>Mais detalhes</Buttom>
       </Container>
 
       {modal && (
         <Modal>
           <ModalContent>
-            <Image src={image} alt={title} />
+            <Image src={cardapio.foto} alt={cardapio.nome} />
             <div>
-              <Title>{title}</Title>
-              <p>{description}</p>
-              <p>Serve: {porcao}</p>
-              <Buttom>Adicionar ao carrinho - {formatPrice(preco)}</Buttom>
+              <Title>{cardapio.nome}</Title>
+              <p>{cardapio.descricao}</p>
+              <p>Serve: {cardapio.porcao}</p>
+              <Buttom onClick={addToCart}>
+                Adicionar ao carrinho - {formatPrice(cardapio.preco)}
+              </Buttom>
             </div>
             <Close
               src={closeIcon}

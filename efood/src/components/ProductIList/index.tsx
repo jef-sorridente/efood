@@ -18,6 +18,8 @@ const ProductIList = () => {
     );
   }
 
+  console.log(restaurante.cardapio);
+
   return (
     <div>
       <Header page="product" />
@@ -32,14 +34,7 @@ const ProductIList = () => {
           <ContainerProducts>
             {restaurante.cardapio.map((item) => (
               <li key={item.id}>
-                <Product
-                  id={item.id}
-                  title={item.nome}
-                  description={item.descricao}
-                  image={item.foto}
-                  porcao={item.porcao}
-                  preco={item.preco}
-                />
+                <Product cardapio={item} />
               </li>
             ))}
           </ContainerProducts>
