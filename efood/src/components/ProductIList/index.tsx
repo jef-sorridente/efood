@@ -3,18 +3,11 @@ import Banner from "../Banner";
 import Header from "../Header";
 import Product from "../Product";
 import { ContainerProducts, Mensage } from "./styles";
-import { Restaurantes } from "../../Pages/Home";
-import { useEffect, useState } from "react";
+import { useGetPratosQuery } from "../../services/api";
 
 const ProductIList = () => {
   const { id } = useParams();
-  const [restaurante, setRestaurante] = useState<Restaurantes>();
-
-  useEffect(() => {
-    fetch(`https://fake-api-tau.vercel.app/api/efood/restaurantes/${id}`)
-      .then((res) => res.json())
-      .then((res) => setRestaurante(res));
-  }, [id]);
+  const { data: restaurante } = useGetPratosQuery(id!);
 
   if (!restaurante) {
     return (
