@@ -14,16 +14,10 @@ import { useDispatch } from "react-redux";
 // import { add } from "../../store/reducers/cart";
 import { Cardapio } from "../../Pages/Home";
 import { add, open } from "../../store/reducers/cart";
+import { formatPrice } from "../../utils/formatPrice";
 
 type Props = {
   cardapio: Cardapio;
-};
-
-export const formatPrice = (preco = 0) => {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(preco);
 };
 
 const Product = ({ cardapio }: Props) => {

@@ -4,7 +4,7 @@ import * as S from "./styles";
 import { close, remove } from "../../store/reducers/cart";
 import { Rootreducer } from "../../store";
 import trashIcon from "../../assets/images/trash.png";
-import { formatPrice } from "../Product";
+import { formatPrice } from "../../utils/formatPrice";
 
 const Cart = () => {
   const { isOpen, items } = useSelector((state: Rootreducer) => state.cart);
