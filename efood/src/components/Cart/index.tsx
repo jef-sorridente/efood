@@ -5,6 +5,7 @@ import { close, remove } from "../../store/reducers/cart";
 import { Rootreducer } from "../../store";
 import trashIcon from "../../assets/images/trash.png";
 import { formatPrice } from "../../utils/formatPrice";
+import { open } from "../../store/reducers/checkout";
 
 const Cart = () => {
   const { isOpen, items } = useSelector((state: Rootreducer) => state.cart);
@@ -22,6 +23,10 @@ const Cart = () => {
     return items.reduce((accum, currentValue) => {
       return (accum += currentValue.preco!);
     }, 0);
+  };
+
+  const openCheckout = () => {
+    dispatch(open());
   };
 
   return (
@@ -55,7 +60,7 @@ const Cart = () => {
           <p>Valor total</p>
           <p>{formatPrice(getTotalPrice())}</p>
         </S.TotalPrice>
-        <Buttom>Continuar com a entrega</Buttom>
+        <Buttom onClick={openCheckout}>Continuar com a entrega</Buttom>
       </S.Sidebar>
     </S.CartContainer>
   );
