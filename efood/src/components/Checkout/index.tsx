@@ -1,19 +1,24 @@
 import { useDispatch, useSelector } from "react-redux";
+import * as Yup from 'yup'
 import { formatPrice } from "../../utils/formatPrice";
+import { useFormik } from "formik";
 
 import { Rootreducer } from "../../store";
 import { useState } from "react";
 import { close } from "../../store/reducers/checkout";
 
 import * as S from "./styles";
-
-// import * as Yup from "yup";
+import { usePurchaseMutation } from "../../services/api";
+import { Navigate } from "react-router-dom";
 
 const Checkout = () => {
   const { items } = useSelector((state: Rootreducer) => state.cart);
   const { isOpen } = useSelector((state: Rootreducer) => state.checkout);
+
+  const [purchase] = usePurchaseMutation()
+
   const [isOpenPayment, setIsOpenPayment] = useState(false);
-  const [isOpenConfirmation, setIsOpenConfirmation] = useState(false);
+
   const dispatch = useDispatch();
 
   const getTotalPrice = () => {
@@ -34,53 +39,141 @@ const Checkout = () => {
     setIsOpenPayment(false);
   };
 
-  const openConfirmation = () => {
-    setIsOpenConfirmation(true);
-  };
+  const form = useFormik({
+    initialValues: {
+      fullName: '',
+      address: '',
+      city: '',
+      cep: '',
+      houseNumber: '',
+      complement: '',
+      cardDisplayName: '',
+      cardNumber: '',
+      cardCode: '',
+      expiresMonth: '',
+      expiresYear: '',
+    },
+    validationSchema: Yup.object({
+      fullName: Yup.string().min(5, 'O nome precisa ter pelo menos 5 caracteres').required('O campo é obrigatório'),
+      address: Yup.string().min(5, 'O endereço precisa ter pelo menos 5 caracteres').required('O campo é obrigatório'),
+      city: Yup.string().min(5, 'A cidade precisa ter pelo menos 5 caracteres').required('O campo é obrigatório'),
+      cep: Yup.string().min(9, 'O campo precisa ter 8 caracteres').max(9, 'O campo precisa ter 8 caracteres'),
+      houseNumber: Yup.string().required('O campo é obrigatório'),
+      complement: Yup.string(),
+      cardDisplayName: Yup.string(),
+      cardNumber: Yup.string(),
+      cardCode: Yup.string(),
+      expiresMonth: Yup.string(),
+      expiresYear: Yup.string(),
+    }),
+    onSubmit: (values) => {
+      purchase({
+        billing: {
+          name: values.fullName
+        },
+        delivery: {
+          address: values.address,
+          city: values.city,
+          cep: values.cep,
+          houseNumber: values.houseNumber,
+          complement: values.complement,
+        },
+        payment: {
+          card: {
+            name: values.cardDisplayName,
+            number: values.cardNumber,
+            code: Number(values.cardCode),
+            expires: {
+              expiresMonth: 1,
+              expiresYear: 10,
+            }
+          }
+        },
+        products: [
+          {
+            id: 1,
+            price: 10
+          }
+        ]
+      })
+    }
+  })
 
-  const closeConfirmation = () => {
-    dispatch(close());
-  };
+  const checkInputHasError = (fuildName: string) => {
+    const isTouched = fuildName in form.touched
+    const isInvalid = fuildName in form.errors
+    const hasError = isTouched && isInvalid
 
+    return hasError
+  }
+
+  // if (items.length === 0) {
+  //   return <Navigate to="/" />
+  // }
+  
   return (
     <S.Container className={isOpen ? "is-open" : ""}>
-      <S.Form className={isOpenPayment ? "is-close" : "is-open"}>
+      <S.Card className={isOpenPayment ? "" : "is-open"}>
         <p className="title">Entrega</p>
         <S.Row>
           <S.InputGroup>
             <label htmlFor="fullName">Quem irá receber</label>
-            <input type="text" id="fullName" name="fullName" />
+            <input type="text" id="fullName" name="fullName"
+              value={form.values.fullName}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+              className={checkInputHasError('fullName') ? 'error' : ''} />
           </S.InputGroup>
         </S.Row>
         <S.Row>
           <S.InputGroup>
             <label htmlFor="address">Endereço</label>
-            <input type="text" id="address" name="address" />
+            <input type="text" id="address" name="address"
+              value={form.values.address}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+              className={checkInputHasError('fullName') ? 'error' : ''} />
           </S.InputGroup>
         </S.Row>
         <S.Row>
           <S.InputGroup>
             <label htmlFor="city">Cidade</label>
-            <input type="text" id="city" name="city" />
+            <input type="text" id="city" name="city"
+              value={form.values.city}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+              className={checkInputHasError('fullName') ? 'error' : ''} />
           </S.InputGroup>
         </S.Row>
 
         <S.Row>
           <S.InputGroup>
             <label htmlFor="cep">CEP</label>
-            <input type="text" id="cep" name="cep" />
+            <input type="text" id="cep" name="cep"
+              value={form.values.cep}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+              className={checkInputHasError('fullName') ? 'error' : ''} />
           </S.InputGroup>
 
           <S.InputGroup>
             <label htmlFor="houseNumber">Número</label>
-            <input type="text" id="houseNumber" name="houseNumber" />
+            <input type="text" id="houseNumber" name="houseNumber"
+              value={form.values.houseNumber}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+              className={checkInputHasError('fullName') ? 'error' : ''} />
           </S.InputGroup>
         </S.Row>
 
         <S.Row>
           <S.InputGroup>
-            <label htmlFor="houseNumber">Complemento (opcional)</label>
-            <input type="text" id="houseNumber" name="houseNumber" />
+            <label htmlFor="complement">Complemento (opcional)</label>
+            <input type="text" id="complement" name="complement"
+              value={form.values.complement}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+              className={checkInputHasError('fullName') ? 'error' : ''} />
           </S.InputGroup>
         </S.Row>
         <S.ContainerButtons>
@@ -91,55 +184,75 @@ const Checkout = () => {
             Voltar para o carrinho
           </S.Button>
         </S.ContainerButtons>
-      </S.Form>
+      </S.Card>
       {/* entrega */}
 
-      <S.Form className={isOpenPayment ? "is-open" : "is-close"}>
+      <S.Card className={isOpenPayment ? "is-open" : ""}>
         <p className="title">
           Pagamento - Valor a pagar R$ {formatPrice(getTotalPrice())}
         </p>
         <S.Row>
           <S.InputGroup>
-            <label htmlFor="cardOwner">Nome no cartão</label>
-            <input type="text" id="cardOwner" name="cardOwner" />
+            <label htmlFor="cardDisplayName">Nome no cartão</label>
+            <input type="text" id="cardDisplayName" name="cardDisplayName"
+              value={form.values.cardDisplayName}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+              className={checkInputHasError('fullName') ? 'error' : ''} />
           </S.InputGroup>
         </S.Row>
 
         <S.Row>
           <S.InputGroup>
-            <label htmlFor="address">Número do cartão</label>
-            <input type="text" id="address" name="address" />
+            <label htmlFor="cardNumber">Número do cartão</label>
+            <input type="text" id="cardNumber" name="cardNumber"
+              value={form.values.cardNumber}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+              className={checkInputHasError('fullName') ? 'error' : ''} />
           </S.InputGroup>
           <S.InputGroup>
-            <label htmlFor="city">CVV</label>
-            <input type="text" id="city" name="city" />
+            <label htmlFor="cardCode">CVV</label>
+            <input type="text" id="cardCode" name="cardCode"
+              value={form.values.cardCode}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+              className={checkInputHasError('fullName') ? 'error' : ''} />
           </S.InputGroup>
         </S.Row>
 
         <S.Row>
           <S.InputGroup>
-            <label htmlFor="cep">Mês de vencimento</label>
-            <input type="text" id="cep" name="cep" />
+            <label htmlFor="expiresMonth">Mês de vencimento</label>
+            <input type="text" id="expiresMonth" name="expiresMonth"
+              value={form.values.expiresMonth}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+              className={checkInputHasError('fullName') ? 'error' : ''} />
           </S.InputGroup>
 
           <S.InputGroup>
-            <label htmlFor="houseNumber">Ano de vencimento</label>
-            <input type="text" id="houseNumber" name="houseNumber" />
+            <label htmlFor="expiresYear">Ano de vencimento</label>
+            <input type="text" id="expiresYear" name="expiresYear"
+              value={form.values.expiresYear}
+              onChange={form.handleChange}
+              onBlur={form.handleBlur}
+              className={checkInputHasError('fullName') ? 'error' : ''} />
           </S.InputGroup>
         </S.Row>
 
         <S.ContainerButtons>
-          <S.Button onClick={openConfirmation} type="button">
+          <S.Button type="button">
             Finalizar pagamento
           </S.Button>
           <S.Button onClick={closePayment} type="button">
             Voltar para a edição de endereço
           </S.Button>
         </S.ContainerButtons>
-      </S.Form>
+      </S.Card>
       {/* pagamento */}
 
-      <S.Card className={isOpenConfirmation ? "is-open" : "is-close"}>
+      {/* <S.Card className={isOpenConfirmation ? "is-open" : ""}>
         <p className="title">Pedido realizado - order_id</p>
 
         <p className="text">
@@ -163,7 +276,7 @@ const Checkout = () => {
             Concluir
           </S.Button>
         </S.ContainerButtons>
-      </S.Card>
+      </S.Card> */}
       {/* confirmação */}
     </S.Container>
   );

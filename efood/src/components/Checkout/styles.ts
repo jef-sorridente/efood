@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { colors } from "../../styles";
 
-export const Container = styled.div`
+export const Container = styled.form`
   background-color: ${colors.primary};
   color: ${colors.secundary};
   padding: 32px 8px;
@@ -19,11 +19,23 @@ export const Container = styled.div`
   }
 `;
 
-export const Form = styled.form`
+export const Card = styled.div`
+  display: none;
+
+   &.is-open {
+    display: block;
+  }
+
   .title {
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 8px;
+  }
+
+  .text {
+    font-size: 14px;
+    line-height: 22px;
+    margin-top: 16px;
   }
 `;
 
@@ -71,15 +83,4 @@ export const Button = styled.button`
   font-weight: 700;
   font-size: 14px;
   cursor: pointer;
-`;
-
-export const Card = styled.div`
-  .title {
-    font-weight: 700;
-  }
-  .text {
-    font-size: 14px;
-    line-height: 22px;
-    margin-top: 16px;
-  }
 `;
