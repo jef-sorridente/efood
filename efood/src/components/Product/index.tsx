@@ -27,6 +27,7 @@ const Product = ({ cardapio }: Props) => {
   const addToCart = () => {
     dispatch(add(cardapio));
     dispatch(open());
+    setModal(false);
   };
 
   const getDescription = (description: string) => {

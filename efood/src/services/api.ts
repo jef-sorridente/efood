@@ -1,36 +1,39 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Restaurantes } from "../Pages/Home";
 
-
 type Product = {
-  id: number,
-  price: number
-}
+  id: number;
+  price: number;
+};
 
 type PurchasePayload = {
   billing: {
-    name: string
-  },
+    name: string;
+  };
   delivery: {
-    address: string,
-    city: string,
-    cep: string,
-    houseNumber: string,
-    complement: string,
-  },
+    address: string;
+    city: string;
+    cep: string;
+    houseNumber: string;
+    complement: string;
+  };
   payment: {
     card: {
-      name: string,
-      number: string,
-      code: number,
+      name: string;
+      number: string;
+      code: number;
       expires: {
-        expiresMonth: number,
-        expiresYear: number,
-      }
-    }
-  },
-  products: Product[]
-}
+        expiresMonth: number;
+        expiresYear: number;
+      };
+    };
+  };
+  products: Product[];
+};
+
+type PurchaseResponse = {
+  orderId: string;
+};
 
 const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -43,16 +46,20 @@ const api = createApi({
     getPratos: builder.query<Restaurantes, string>({
       query: (id) => `restaurantes/${id}`,
     }),
-    purchase: builder.mutation<any, PurchasePayload>({
+    purchase: builder.mutation<PurchaseResponse, PurchasePayload>({
       query: (body) => ({
-        url: 'checkout',
-        method: 'POST',
-        body
-      })
-    })
+        url: "checkout",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useGetRestaurantesQuery, useGetPratosQuery, usePurchaseMutation } = api;
+export const {
+  useGetRestaurantesQuery,
+  useGetPratosQuery,
+  usePurchaseMutation,
+} = api;
 
 export default api;

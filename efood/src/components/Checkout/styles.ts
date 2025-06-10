@@ -1,15 +1,12 @@
 import styled from "styled-components";
 import { colors } from "../../styles";
 
-export const Container = styled.form`
-  background-color: ${colors.primary};
-  color: ${colors.secundary};
-  padding: 32px 8px;
-  max-width: 360px;
-  width: 100%;
+export const Container = styled.div`
   position: fixed;
   right: 0;
   top: 0;
+  left: 0;
+  width: 100vw;
   height: 100vh;
   display: none;
   z-index: 1;
@@ -19,10 +16,32 @@ export const Container = styled.form`
   }
 `;
 
+export const ContainerCards = styled.div`
+  background-color: ${colors.primary};
+  color: ${colors.secundary};
+  padding: 32px 8px;
+  max-width: 360px;
+  width: 100%;
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  z-index: 1;
+`;
+
+export const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+`;
+
 export const Card = styled.div`
   display: none;
 
-   &.is-open {
+  &.is-open {
     display: block;
   }
 
@@ -57,7 +76,6 @@ export const InputGroup = styled.div`
 
   input {
     display: block;
-    font-weight: 700;
     width: 100%;
     font-size: 14px;
     background-color: ${colors.secundary};
@@ -65,6 +83,10 @@ export const InputGroup = styled.div`
     padding: 8px;
     margin-top: 8px;
     outline: none;
+
+    &.error {
+      box-shadow: 0 0 10px red;
+    }
   }
 `;
 

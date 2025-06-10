@@ -45,14 +45,3 @@ const ProductIList = () => {
 };
 
 export default ProductIList;
-
-{
-  /* {products.items.map((prod) => (
-  <Product
-    key={prod.id}
-    id={prod.id}
-    title={prod.title}
-    description={prod.description}
-  />
-))} */
-}

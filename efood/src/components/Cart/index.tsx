@@ -27,6 +27,7 @@ const Cart = () => {
 
   const openCheckout = () => {
     dispatch(open());
+    dispatch(close());
   };
 
   return (
@@ -34,33 +35,34 @@ const Cart = () => {
       <S.Overlay onClick={closeCart} />
       <S.Sidebar>
         {items.length > 0 ? (
-          <ul>
-            {items.map((item) => (
-              <S.CartItem key={item.id}>
-                <img src={item.foto} alt={item.nome} />
-                <div>
-                  <h4>{item.nome}</h4>
-                  <p>{formatPrice(item.preco)}</p>
-                </div>
-                <img
-                  src={trashIcon}
-                  className="trash"
-                  onClick={() => removeItem(item.id)}
-                />
-              </S.CartItem>
-            ))}
-          </ul>
+          <>
+            <ul>
+              {items.map((item) => (
+                <S.CartItem key={item.id}>
+                  <img src={item.foto} alt={item.nome} />
+                  <div>
+                    <p>{item.nome}</p>
+                    <p>{formatPrice(item.preco)}</p>
+                  </div>
+                  <img
+                    src={trashIcon}
+                    className="trash"
+                    onClick={() => removeItem(item.id)}
+                  />
+                </S.CartItem>
+              ))}
+            </ul>
+            <S.TotalPrice>
+              <p>Valor total</p>
+              <p>{formatPrice(getTotalPrice())}</p>
+            </S.TotalPrice>
+            <Buttom onClick={openCheckout}>Continuar com a entrega</Buttom>
+          </>
         ) : (
           <ul>
             <h4>Você não possui itens no seu carrinho!</h4>
           </ul>
         )}
-
-        <S.TotalPrice>
-          <p>Valor total</p>
-          <p>{formatPrice(getTotalPrice())}</p>
-        </S.TotalPrice>
-        <Buttom onClick={openCheckout}>Continuar com a entrega</Buttom>
       </S.Sidebar>
     </S.CartContainer>
   );

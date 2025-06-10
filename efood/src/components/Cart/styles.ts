@@ -33,6 +33,7 @@ export const Sidebar = styled.aside`
   width: 100%;
   padding: 32px 8px;
   z-index: 1;
+  overflow-y: scroll;
 
   ul {
     display: flex;
@@ -73,6 +74,7 @@ export const CartItem = styled.li`
     position: absolute;
     bottom: 8px;
     right: 8px;
+    cursor: pointer;
   }
 `;
 

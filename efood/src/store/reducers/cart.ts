@@ -36,6 +36,7 @@ const cartSlice = createSlice({
     close: (state) => {
       state.isOpen = false;
     },
+
     clear: (state) => {
       state.items = [];
     },
