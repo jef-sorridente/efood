@@ -326,7 +326,7 @@ const Checkout = () => {
 
               <S.ContainerButtons>
                 <S.Button
-                  onClick={form.handleSubmit}
+                  onClick={() => form.handleSubmit()}
                   title="Finalizar pagamento"
                   type="submit"
                   disabled={isLoading}
