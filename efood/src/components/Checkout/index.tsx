@@ -86,8 +86,8 @@ const Checkout = () => {
             number: values.cardNumber,
             code: Number(values.cardCode),
             expires: {
-              expiresMonth: 1,
-              expiresYear: 10,
+              expiresMonth: Number(values.expiresMonth),
+              expiresYear: Number(values.expiresYear),
             },
           },
         },
