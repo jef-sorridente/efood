@@ -56,17 +56,22 @@ const Checkout = () => {
       expiresYear: "",
     },
     validationSchema: Yup.object({
-      fullName: Yup.string().min(3).required(),
-      address: Yup.string().required(),
-      city: Yup.string().required(),
-      cep: Yup.string().required(),
-      houseNumber: Yup.string().required(),
+      fullName: Yup.string()
+        .min(3, "O nome precisa ter pelo menos 5 caracteres")
+        .required("O campo é obrigatório"),
+      address: Yup.string().required("O campo é obrigatório"),
+      city: Yup.string().required("O campo é obrigatório"),
+      cep: Yup.string().required("O campo é obrigatório"),
+      houseNumber: Yup.string().required("O campo é obrigatório"),
       complement: Yup.string(),
-      cardDisplayName: Yup.string().min(3).required(),
-      cardNumber: Yup.string().required(),
-      cardCode: Yup.string().required(),
-      expiresMonth: Yup.string().required(),
-      expiresYear: Yup.string().required(),
+      cardDisplayName: Yup.string().min(3).required("O campo é obrigatório"),
+      cardNumber: Yup.string()
+        .required("O campo é obrigatório")
+        .min(14, "O campo precisa ter 14 caracteres")
+        .max(14, "O campo precisa ter 14 caracteres"),
+      cardCode: Yup.string().required("O campo é obrigatório").min(3),
+      expiresMonth: Yup.string().required("O campo é obrigatório"),
+      expiresYear: Yup.string().required("O campo é obrigatório"),
     }),
     onSubmit: (values) => {
       purchase({
@@ -326,7 +331,7 @@ const Checkout = () => {
 
               <S.ContainerButtons>
                 <S.Button
-                  onClick={() => form.handleSubmit()}
+                  onClick={form.handleSubmit}
                   title="Finalizar pagamento"
                   type="submit"
                   disabled={isLoading}
