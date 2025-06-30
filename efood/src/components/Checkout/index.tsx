@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import { formatPrice } from "../../utils/formatPrice";
-import { useFormik } from "formik";
+import { ErrorMessage, useFormik } from "formik";
 import InputMask from "react-input-mask";
 
 import { Rootreducer } from "../../store";
@@ -148,7 +148,7 @@ const Checkout = () => {
             </S.ContainerButtons>
           </S.Card>
         ) : (
-          <form>
+          <form onSubmit={form.handleSubmit}>
             <S.Card className={isOpenPayment ? "" : "is-open"}>
               <p className="title">Entrega</p>
               <S.Row>
@@ -331,7 +331,6 @@ const Checkout = () => {
 
               <S.ContainerButtons>
                 <S.Button
-                  onClick={form.handleSubmit}
                   title="Finalizar pagamento"
                   type="submit"
                   disabled={isLoading}
@@ -343,6 +342,10 @@ const Checkout = () => {
                 <S.Button onClick={() => setIsOpenPayment(false)} type="button">
                   Voltar para a edição de endereço
                 </S.Button>
+
+                {Object.keys(form.errors).length > 0 && (
+                  <p>Por favor verificar todos os campos obrigatórios.</p>
+                )}
               </S.ContainerButtons>
             </S.Card>
           </form>
