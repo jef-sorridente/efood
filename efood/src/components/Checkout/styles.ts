@@ -94,6 +94,12 @@ export const ContainerButtons = styled.div`
   margin-top: 24px;
 `;
 
+export const Errors = styled.p`
+  font-size: 13px;
+  margin-top: 16px;
+  text-align: center;
+`;
+
 export const Button = styled.button`
   width: 100%;
   margin-top: 8px;

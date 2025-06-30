@@ -18,8 +18,6 @@ const ProductIList = () => {
     );
   }
 
-  console.log(restaurante.cardapio);
-
   return (
     <div>
       <Header page="product" />

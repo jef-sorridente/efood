@@ -12,14 +12,12 @@ import { close as closeCart, open } from "../../store/reducers/cart";
 import * as S from "./styles";
 import { usePurchaseMutation } from "../../services/api";
 import { clear } from "../../store/reducers/cart";
-import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
   const { items } = useSelector((state: Rootreducer) => state.cart);
   const { isOpen } = useSelector((state: Rootreducer) => state.checkout);
   const [purchase, { data, isSuccess, isLoading, reset }] =
     usePurchaseMutation();
-  const navigate = useNavigate();
 
   const [isOpenPayment, setIsOpenPayment] = useState(false);
 
@@ -29,16 +27,6 @@ const Checkout = () => {
     return items.reduce((accum, currentValue) => {
       return (accum += currentValue.preco!);
     }, 0);
-  };
-
-  const purchaseCompleted = () => {
-    dispatch(clear());
-    dispatch(closeCheck());
-    dispatch(closeCart());
-    setIsOpenPayment(false);
-    form.resetForm();
-    reset();
-    navigate("/");
   };
 
   const form = useFormik({
@@ -115,6 +103,15 @@ const Checkout = () => {
   const backToCart = () => {
     dispatch(closeCheck());
     dispatch(open());
+  };
+
+  const purchaseCompleted = () => {
+    dispatch(closeCheck());
+    dispatch(closeCart());
+    setIsOpenPayment(false);
+    dispatch(clear());
+    form.resetForm();
+    reset();
   };
 
   return (
@@ -344,14 +341,18 @@ const Checkout = () => {
                 </S.Button>
 
                 {Object.keys(form.errors).length > 0 && (
-                  <p>Por favor verificar todos os campos obrigatórios.</p>
+                  <S.Errors>
+                    * Por favor verificar todos os campos obrigatórios.
+                  </S.Errors>
                 )}
               </S.ContainerButtons>
             </S.Card>
           </form>
         )}
       </S.ContainerCards>
-      <S.Overlay onClick={() => dispatch(closeCheck())} />
+      <S.Overlay
+        onClick={!isSuccess ? () => dispatch(closeCheck()) : purchaseCompleted}
+      />
     </S.Container>
   );
 };
