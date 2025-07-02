@@ -49,17 +49,37 @@ const Checkout = () => {
         .required("O campo é obrigatório"),
       address: Yup.string().required("O campo é obrigatório"),
       city: Yup.string().required("O campo é obrigatório"),
-      cep: Yup.string().required("O campo é obrigatório"),
+      cep: Yup.string().required("O campo é obrigatório").test(
+        "len",
+        "O número do cartão deve ter 16 dígitos",
+        (value) => !!value && value.replace(/\D/g, "").length === 7
+      ),
       houseNumber: Yup.string().required("O campo é obrigatório"),
       complement: Yup.string(),
       cardDisplayName: Yup.string().min(3).required("O campo é obrigatório"),
-      cardNumber: Yup.string()
+      cardNumber: Yup.string().min(13).test(
+        "len",
+        "O número do cartão deve ter 16 dígitos",
+        (value) => !!value && value.replace(/\D/g, "").length === 12
+      )
         .required("O campo é obrigatório")
         .min(14, "O campo precisa ter 14 caracteres")
         .max(14, "O campo precisa ter 14 caracteres"),
-      cardCode: Yup.string().required("O campo é obrigatório").min(3),
-      expiresMonth: Yup.string().required("O campo é obrigatório"),
-      expiresYear: Yup.string().required("O campo é obrigatório"),
+      cardCode: Yup.string().required("O campo é obrigatório").test(
+        "len",
+        "O número do cartão deve ter 16 dígitos",
+        (value) => !!value && value.replace(/\D/g, "").length === 3
+      ),
+      expiresMonth: Yup.string().required("O campo é obrigatório").test(
+        "len",
+        "O número do cartão deve ter 16 dígitos",
+        (value) => !!value && value.replace(/\D/g, "").length === 2
+      ),
+      expiresYear: Yup.string().required("O campo é obrigatório").test(
+        "len",
+        "O número do cartão deve ter 16 dígitos",
+        (value) => !!value && value.replace(/\D/g, "").length === 4
+      ),
     }),
     onSubmit: (values) => {
       purchase({
