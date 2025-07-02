@@ -47,8 +47,8 @@ const Checkout = () => {
       fullName: Yup.string()
         .min(3, "O nome precisa ter pelo menos 5 caracteres")
         .required("O campo é obrigatório"),
-      address: Yup.string().required("O campo é obrigatório"),
-      city: Yup.string().required("O campo é obrigatório"),
+      address: Yup.string().required("O campo é obrigatório").min(3),
+      city: Yup.string().required("O campo é obrigatório").min(3),
       cep: Yup.string().required("O campo é obrigatório").test(
         "len",
         "O número do cartão deve ter 16 dígitos",
